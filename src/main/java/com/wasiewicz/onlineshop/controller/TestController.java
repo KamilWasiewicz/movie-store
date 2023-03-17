@@ -8,17 +8,17 @@ public class TestController {
 
 
     @GetMapping
-    public String home(){
+    public String home() {
         return "Hello world";
     }
 
     @GetMapping("/user")
-    public String user(){
+    public String user() {
         return "Hello user";
     }
 
     @GetMapping("/admin")
-    public String admin(){
+    public String admin() {
         return "Hello admin";
     }
 
