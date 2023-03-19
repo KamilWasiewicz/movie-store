@@ -1,4 +1,4 @@
-package com.wasiewicz.onlineshop.service;
+package com.wasiewicz.onlineshop.security.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -42,7 +42,7 @@ public String generateToken(UserDetails userDetails){
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60*60))
                 .signWith(getSingInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

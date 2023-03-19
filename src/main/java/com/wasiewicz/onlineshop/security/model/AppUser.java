@@ -1,4 +1,4 @@
-package com.wasiewicz.onlineshop.model;
+package com.wasiewicz.onlineshop.security.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,12 +23,13 @@ public class AppUser implements UserDetails {
     private Long id;
 
     private String firstname;
-
     private String lastname;
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToMany(mappedBy = "appUser")
+    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,6 +1,7 @@
-package com.wasiewicz.onlineshop.config;
+package com.wasiewicz.onlineshop.security.config;
 
-import com.wasiewicz.onlineshop.service.JwtService;
+import com.wasiewicz.onlineshop.security.repository.TokenRepository;
+import com.wasiewicz.onlineshop.security.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
 
     @Override
 
@@ -38,9 +40,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         jwtToken = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwtToken);
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (userEmail != null && SecurityContextHolder
+                .getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValid(jwtToken, userDetails)) {
+            var isTokenValid=tokenRepository.findByToken(jwtToken)
+                    .map(token-> !token.isExpired()&&!token.isRevoked())
+                    .orElse(false);
+            if (jwtService.isTokenValid(jwtToken, userDetails)&&isTokenValid) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

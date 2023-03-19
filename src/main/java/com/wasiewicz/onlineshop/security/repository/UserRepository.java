@@ -1,6 +1,6 @@
-package com.wasiewicz.onlineshop.repository;
+package com.wasiewicz.onlineshop.security.repository;
 
-import com.wasiewicz.onlineshop.model.AppUser;
+import com.wasiewicz.onlineshop.security.model.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
