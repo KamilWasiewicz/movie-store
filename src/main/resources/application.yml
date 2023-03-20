@@ -5,10 +5,11 @@ spring:
     password: Kamil
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
       database: mysql
       database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
