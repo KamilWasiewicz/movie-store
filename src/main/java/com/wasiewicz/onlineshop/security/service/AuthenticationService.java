@@ -4,6 +4,7 @@ package com.wasiewicz.onlineshop.security.service;
 import com.wasiewicz.onlineshop.security.model.*;
 import com.wasiewicz.onlineshop.security.repository.TokenRepository;
 import com.wasiewicz.onlineshop.security.repository.UserRepository;
+import com.wasiewicz.onlineshop.security.validator.ObjectValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,8 +19,10 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
+    private final ObjectValidator validator;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        validator.validate(request);
         var appUser = AppUser.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -37,7 +40,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
         var appUser = userRepository
                 .findByEmail(request.getEmail())
