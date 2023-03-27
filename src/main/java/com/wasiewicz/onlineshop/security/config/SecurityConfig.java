@@ -22,16 +22,18 @@ public class SecurityConfig {
     private final LogoutHandler logoutHandler;
 
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/login", "/api/v1/register","/api/v1/products")
+                .requestMatchers(
+                        "/api/v1/login"
+                        , "/api/v1/register"
+                        , "/api/v1/films/**")
                 .permitAll()
-                .requestMatchers("/users")
+                .requestMatchers("/api/v1/users")
                 .hasAuthority("ADMIN")
                 .anyRequest()
                 .authenticated()
