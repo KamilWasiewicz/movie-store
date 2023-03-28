@@ -1,5 +1,7 @@
 package com.wasiewicz.onlineshop.security.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wasiewicz.onlineshop.filmshop.model.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +31,10 @@ public class AppUser implements UserDetails {
     private Role role;
     @OneToMany(mappedBy = "appUser")
     private List<Token> tokens;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",
+            fetch = FetchType.LAZY)
+    private List<Order> orders;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

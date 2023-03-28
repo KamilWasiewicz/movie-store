@@ -1,7 +1,9 @@
 package com.wasiewicz.onlineshop.filmshop.controller;
 
+import com.wasiewicz.onlineshop.filmshop.dto.FilmDTO;
 import com.wasiewicz.onlineshop.filmshop.model.Film;
 import com.wasiewicz.onlineshop.filmshop.service.FilmService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,12 +17,12 @@ public class FilmController {
     private final FilmService filmService;
 
     @GetMapping
-    public List<Film> getFilms() {
+    public List<FilmDTO> getFilms() {
         return filmService.getFilms();
     }
 
     @GetMapping("/{id}")
-    public Film getSingleFilm(@PathVariable long id) {
+    public Film getSingleFilm(@PathVariable long id) throws EntityNotFoundException {
         return filmService.getSingleFilm(id);
     }
 
@@ -30,17 +32,17 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film addFilm(@RequestBody Film film) {
+    public Film addFilm(@RequestBody FilmDTO film) {
         return filmService.addFilm(film);
     }
 
     @PutMapping("/{id}")
-    public Film editFilm(@RequestBody Film film) {
+    public Film editFilm(@RequestBody FilmDTO film) {
         return filmService.editFilm(film);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteFilm(@PathVariable long id) {
+    public void deleteFilm(@PathVariable long id) throws EntityNotFoundException {
         filmService.deleteFilm(id);
     }
 
