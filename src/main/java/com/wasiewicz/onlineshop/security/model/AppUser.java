@@ -31,10 +31,6 @@ public class AppUser implements UserDetails {
     private Role role;
     @OneToMany(mappedBy = "appUser")
     private List<Token> tokens;
-    @JsonIgnore
-    @OneToMany(mappedBy = "user",
-            fetch = FetchType.LAZY)
-    private List<Order> orders;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

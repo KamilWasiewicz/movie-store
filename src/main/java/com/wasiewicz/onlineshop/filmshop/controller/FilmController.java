@@ -22,27 +22,23 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public Film getSingleFilm(@PathVariable long id) throws EntityNotFoundException {
+    public FilmDTO getSingleFilm(@PathVariable Long id) throws EntityNotFoundException {
         return filmService.getSingleFilm(id);
     }
 
-    @GetMapping("/ratings/{rating}")
-    public Film getFilmByRating(@PathVariable double rating) {
-        return filmService.getFilmByRating(rating);
-    }
 
     @PostMapping
-    public Film addFilm(@RequestBody FilmDTO film) {
+    public FilmDTO addFilm(@RequestBody FilmDTO film) {
         return filmService.addFilm(film);
     }
 
     @PutMapping("/{id}")
-    public Film editFilm(@RequestBody FilmDTO film) {
-        return filmService.editFilm(film);
+    public FilmDTO editFilm(@PathVariable Long id,@RequestBody FilmDTO film) {
+        return filmService.editFilm(film,id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteFilm(@PathVariable long id) throws EntityNotFoundException {
+    public void deleteFilm(@PathVariable Long id) throws EntityNotFoundException {
         filmService.deleteFilm(id);
     }
 

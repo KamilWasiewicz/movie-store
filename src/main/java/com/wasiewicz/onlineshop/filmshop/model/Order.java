@@ -23,22 +23,18 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotNull
     @NotEmpty
     @Column(name = "order_number")
     private String orderNumber;
-
-    @ManyToOne
-    @JoinColumn(name = "app_user_id")
-    private AppUser user;
-
-    @Column(name = "total_price")
-    private BigDecimal totalPrice;
-
+    @Column(name = "user_id")
+    private Long userId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
+    private ShoppingCart shoppingCart;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    private List<OrderItem> orderItems;
 }

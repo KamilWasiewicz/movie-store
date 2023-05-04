@@ -53,15 +53,4 @@ public class Film {
     @NotEmpty
     private String imageUrl;
 
-    public Film(FilmDTO filmDTO) {
-        this.title = filmDTO.getTitle();
-        this.director = filmDTO.getDirector();
-        this.category = filmDTO.getCategory();
-        this.description = filmDTO.getDescription();
-        this.rating = filmDTO.getRating();
-        this.price = filmDTO.getPrice();
-        this.inStock = filmDTO.getInStock();
-        this.imageUrl = filmDTO.getImageUrl();
-        this.stars = filmDTO.getStars();
-    }
 }

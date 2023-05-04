@@ -11,11 +11,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "order_items")
+@Table(name = "cart_items")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderItem {
+public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,14 +27,6 @@ public class OrderItem {
     @NotNull
     @Column(name = "price")
     private BigDecimal price;
-
-    @Column(name = "created_date")
-    private Date createdDate;
-
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private Order order;
 
     @OneToOne
     @JoinColumn(name = "film_id", referencedColumnName = "id")

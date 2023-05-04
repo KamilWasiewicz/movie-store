@@ -1,11 +1,15 @@
 package com.wasiewicz.onlineshop.handler;
 
 
+import com.wasiewicz.onlineshop.exceptions.EmptyCartException;
 import com.wasiewicz.onlineshop.exceptions.ObjectNotValidException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -22,5 +26,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(exp.getErrorMessages());
+    }
+    @ExceptionHandler(EmptyCartException.class)
+    public ResponseEntity<?> handleEmptyCartException(EmptyCartException ex) {
+        return ResponseEntity.badRequest().body(ex.getErrorMessages());
     }
 }
