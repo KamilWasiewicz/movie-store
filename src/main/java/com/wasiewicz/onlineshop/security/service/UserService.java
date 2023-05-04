@@ -1,6 +1,5 @@
 package com.wasiewicz.onlineshop.security.service;
 
-import com.wasiewicz.onlineshop.filmshop.model.Film;
 import com.wasiewicz.onlineshop.security.model.AppUser;
 import com.wasiewicz.onlineshop.security.repository.UserDTO;
 import com.wasiewicz.onlineshop.security.repository.UserDTOMapper;

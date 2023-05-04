@@ -1,7 +1,6 @@
 package com.wasiewicz.onlineshop.filmshop.controller;
 
 import com.wasiewicz.onlineshop.filmshop.dto.FilmDTO;
-import com.wasiewicz.onlineshop.filmshop.model.Film;
 import com.wasiewicz.onlineshop.filmshop.service.FilmService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,5 @@
 package com.wasiewicz.onlineshop.filmshop.model;
 
-import com.wasiewicz.onlineshop.filmshop.dto.FilmDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

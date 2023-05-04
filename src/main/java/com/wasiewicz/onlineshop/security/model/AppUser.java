@@ -1,7 +1,5 @@
 package com.wasiewicz.onlineshop.security.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.wasiewicz.onlineshop.filmshop.model.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
