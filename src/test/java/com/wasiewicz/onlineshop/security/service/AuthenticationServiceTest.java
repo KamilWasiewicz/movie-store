@@ -102,7 +102,6 @@ class AuthenticationServiceTest {
         when(tokenRepository.save(any(Token.class))).thenReturn(token);
 
         // when
-        AuthenticationResponse response = authenticationService.authenticate(request);
         // then
         verify(userRepository).findByEmail(email);
         verify(jwtService).generateToken(user);
