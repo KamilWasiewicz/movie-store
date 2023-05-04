@@ -1,6 +1,5 @@
 package com.wasiewicz.onlineshop.filmshop.repository;
 
-import com.wasiewicz.onlineshop.filmshop.model.Order;
 import com.wasiewicz.onlineshop.filmshop.model.ShoppingCart;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
