@@ -98,15 +98,19 @@ public class CartItemService {
         boolean isRemoved = cartItems.removeIf(item -> item.getId().equals(cartItemId));
 
         if (isRemoved) {
-            setTotalPriceForShoppingCart(shoppingCart);
-            shoppingCartRepository.save(shoppingCart);
+            try {
+                setTotalPriceForShoppingCart(shoppingCart);
+                shoppingCartRepository.save(shoppingCart);
+            } catch (Exception e) {
+                throw new RuntimeException("Error occurred while saving shopping cart", e);
+            }
             return shoppingCartDtoMapper.apply(shoppingCart);
         } else {
             throw new EntityNotFoundException("Cart item with id " + cartItemId + " not found in shopping cart with id " + cartId);
         }
     }
 
-    @Transactional
+        @Transactional
     public ShoppingCartDto deleteAllItemsFromShoppingCart(Long cartId) {
         var shoppingCartOptional = shoppingCartRepository.findById(cartId);
 
