@@ -94,14 +94,14 @@ class AuthenticationServiceTest {
                 .password(encodedPassword)
                 .build();
         Token token = new Token(null, authToken, TokenType.BEARER, false, false, user);
-
+        // when
         AuthenticationRequest request = new AuthenticationRequest(email, password);
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(password, encodedPassword)).thenReturn(true);
         when(jwtService.generateToken(user)).thenReturn(authToken);
         when(tokenRepository.save(any(Token.class))).thenReturn(token);
 
-        // when
+
         // then
         verify(userRepository).findByEmail(email);
         verify(jwtService).generateToken(user);
