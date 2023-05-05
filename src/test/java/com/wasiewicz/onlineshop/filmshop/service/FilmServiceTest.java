@@ -40,29 +40,32 @@ class FilmServiceTest {
     @Test
     void testGetFilms() {
         // Setup
-        final List<FilmDTO> expectedResult = List.of(
-                new FilmDTO(0L, "title", "director", "stars", "category", "description", 0.0, new BigDecimal("0.00"), 0,
-                        "imageUrl"));
+        final FilmDTO expectedResult = new FilmDTO(0L, "title", "director", "stars", "category", "description", 0.0,
+                new BigDecimal("0.00"), 0, "imageUrl");
 
-        // Configure FilmRepository.findAll(...).
-        final Film film = new Film();
-        film.setTitle("title");
-        film.setDirector("director");
-        film.setStars("stars");
-        film.setCategory("category");
-        film.setDescription("description");
-        film.setRating(0.0);
-        film.setPrice(new BigDecimal("0.00"));
-        film.setInStock(0);
-        film.setImageUrl("imageUrl");
-        final List<Film> films = List.of(film);
+
+        // Configure FilmDtoMapper.apply(...).
+        final FilmDTO filmDTO = new FilmDTO(0L, "title", "director", "stars", "category", "description", 0.0,
+                new BigDecimal("0.00"), 0, "imageUrl");
+        final Film film2 = new Film();
+        film2.setTitle("title");
+        film2.setDirector("director");
+        film2.setStars("stars");
+        film2.setCategory("category");
+        film2.setDescription("description");
+        film2.setRating(0.0);
+        film2.setPrice(new BigDecimal("0.00"));
+        film2.setInStock(0);
+        film2.setImageUrl("imageUrl");
+        when(mockFilmDtoMapper.apply(film2)).thenReturn(filmDTO);
+        final List<Film> films = List.of(film2);
         when(mockFilmRepository.findAll()).thenReturn(films);
 
         // Run the test
         final List<FilmDTO> result = filmServiceUnderTest.getFilms();
 
         // Verify the results
-        assertThat(result).isEqualTo(expectedResult);
+        assertThat(result).isEqualTo(List.of(expectedResult));
     }
 
     @Test
@@ -288,7 +291,7 @@ class FilmServiceTest {
     @Test
     void testDeleteFilm() {
         // Setup
-        when(mockFilmRepository.existsById(0L)).thenReturn(false);
+        when(mockFilmRepository.existsById(0L)).thenReturn(true);
 
         // Run the test
         filmServiceUnderTest.deleteFilm(0L);

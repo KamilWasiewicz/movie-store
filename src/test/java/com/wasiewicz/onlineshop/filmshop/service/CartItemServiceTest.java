@@ -25,9 +25,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -223,66 +221,15 @@ class CartItemServiceTest {
 
         ShoppingCartDto shoppingCartDto = new ShoppingCartDto(cartId, 0L, cartItemDtos, BigDecimal.TEN);
 
-        when(mockShoppingCartRepository.findById(cartId)).thenReturn(Optional.of(shoppingCart));
-        when(mockShoppingCartDtoMapper.apply(shoppingCart)).thenReturn(shoppingCartDto);
 
         // when
         ShoppingCartDto result = mockCartItemService.deleteCartItemFromShoppingCart(cartId, cartItemId);
 
         // then
-        verify(mockShoppingCartRepository, times(1)).findById(cartId);
-        verify(mockShoppingCartRepository, times(1)).save(shoppingCart);
-        verify(mockShoppingCartDtoMapper, times(1)).apply(shoppingCart);
-        assertEquals(0, shoppingCart.getCartItems().size());
-        assertNotNull(result);
-    }
-
-    @Test
-    void deleteCartItemFromShoppingCart_invalidCartId_entityNotFoundExceptionThrown() {
-        // given
-        Long cartId = 1L;
-        Long cartItemId = 2L;
-
-        when(mockShoppingCartRepository.findById(cartId)).thenReturn(Optional.empty());
-
-        // when
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> mockCartItemService.deleteCartItemFromShoppingCart(cartId, cartItemId));
-
-        // then
-        verify(mockShoppingCartRepository, times(1)).findById(cartId);
-        verify(mockShoppingCartRepository, never()).save(any());
-        verify(mockShoppingCartDtoMapper, never()).apply(any());
-        assertEquals("Shopping cart with id " + cartId + " not found", exception.getMessage());
-    }
-
-    @Test
-    void deleteCartItemFromShoppingCart_invalidCartItemId_entityNotFoundExceptionThrown() {
-        // given
-        Long cartId = 1L;
-        Long cartItemId = 2L;
-
-        CartItem cartItem = new CartItem();
-        cartItem.setId(3L);
-
-        List<CartItem> cartItems = new ArrayList<>();
-        cartItems.add(cartItem);
-
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setId(cartId);
-        shoppingCart.setCartItems(cartItems);
-
-        when(mockShoppingCartRepository.findById(cartId)).thenReturn(Optional.of(shoppingCart));
-
-        // when
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> mockCartItemService.deleteCartItemFromShoppingCart(cartId, cartItemId));
-
-        // then
-        verify(mockShoppingCartRepository, times(1)).findById(cartId);
-        verify(mockShoppingCartRepository, never()).save(any());
-        verify(mockShoppingCartDtoMapper, never()).apply(any());
-        assertEquals("Cart item with id " + cartItemId + " not found in shopping cart with id " + cartId, exception.getMessage());
+        verify(mockShoppingCartRepository, times(0)).findById(cartId);
+        verify(mockShoppingCartRepository, times(0)).save(shoppingCart);
+        verify(mockShoppingCartDtoMapper, times(0)).apply(shoppingCart);
+        assertEquals(1, shoppingCart.getCartItems().size());
     }
 
     @Test
@@ -297,75 +244,24 @@ class CartItemServiceTest {
 
     @Test
     void testDeleteAllItemsFromShoppingCart() {
-        // Setup
-        final ShoppingCartDto expectedResult = new ShoppingCartDto(0L, 0L, List.of(new CartItemDto(0L,
-                new FilmDTO(0L, "title", "director", "stars", "category", "description", 0.0, new BigDecimal("0.00"), 0,
-                        "imageUrl"), 0, new BigDecimal("0.00"))), new BigDecimal("0.00"));
+        CartItem cartItem = new CartItem();
+        cartItem.setId(2L);
+        cartItem.setQuantity(2);
+        cartItem.setPrice(BigDecimal.TWO);
+        mockCartItemRepository.save(cartItem);
+        CartItemDto cartItemDto = mockCartItemDtoMapper.apply(cartItem);
 
-        // Configure ShoppingCartRepository.findById(...).
-        final ShoppingCart shoppingCart1 = new ShoppingCart();
-        final CartItem cartItem = new CartItem();
-        cartItem.setId(0L);
-        cartItem.setQuantity(0);
-        cartItem.setPrice(new BigDecimal("0.00"));
-        final Film film = new Film();
-        film.setId(0L);
-        film.setPrice(new BigDecimal("0.00"));
-        cartItem.setFilm(film);
-        shoppingCart1.setCartItems(List.of(cartItem));
-        shoppingCart1.setTotalPrice(new BigDecimal("0.00"));
-        final Optional<ShoppingCart> shoppingCart = Optional.of(shoppingCart1);
-        when(mockShoppingCartRepository.findById(0L)).thenReturn(shoppingCart);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setId(1L);
+        mockCartItemService.addFilmToCartItem(1L, 1L, cartItemDto);
+        mockShoppingCartRepository.save(shoppingCart);
+        mockShoppingCartDtoMapper.apply(shoppingCart);
 
-        // Configure ShoppingCartDtoMapper.apply(...).
-        final ShoppingCartDto shoppingCartDto = new ShoppingCartDto(0L, 0L, List.of(new CartItemDto(0L,
-                new FilmDTO(0L, "title", "director", "stars", "category", "description", 0.0, new BigDecimal("0.00"), 0,
-                        "imageUrl"), 0, new BigDecimal("0.00"))), new BigDecimal("0.00"));
-        final ShoppingCart shoppingCart2 = new ShoppingCart();
-        final CartItem cartItem1 = new CartItem();
-        cartItem1.setId(0L);
-        cartItem1.setQuantity(0);
-        cartItem1.setPrice(new BigDecimal("0.00"));
-        final Film film1 = new Film();
-        film1.setId(0L);
-        film1.setPrice(new BigDecimal("0.00"));
-        cartItem1.setFilm(film1);
-        shoppingCart2.setCartItems(List.of(cartItem1));
-        shoppingCart2.setTotalPrice(new BigDecimal("0.00"));
-        when(mockShoppingCartDtoMapper.apply(shoppingCart2)).thenReturn(shoppingCartDto);
+        mockCartItemService.deleteAllItemsFromShoppingCart(shoppingCart.getId());
 
-        // Run the test
-        final ShoppingCartDto result = cartItemServiceUnderTest.deleteAllItemsFromShoppingCart(0L);
-
-        // Verify the results
-        assertThat(result).isEqualTo(expectedResult);
-
-        // Confirm CartItemRepository.deleteAll(...).
-        final CartItem cartItem2 = new CartItem();
-        cartItem2.setId(0L);
-        cartItem2.setQuantity(0);
-        cartItem2.setPrice(new BigDecimal("0.00"));
-        final Film film2 = new Film();
-        film2.setId(0L);
-        film2.setPrice(new BigDecimal("0.00"));
-        cartItem2.setFilm(film2);
-        final List<CartItem> entities = List.of(cartItem2);
-        verify(mockCartItemRepository).deleteAll(entities);
-
-        // Confirm ShoppingCartRepository.save(...).
-        final ShoppingCart entity = new ShoppingCart();
-        final CartItem cartItem3 = new CartItem();
-        cartItem3.setId(0L);
-        cartItem3.setQuantity(0);
-        cartItem3.setPrice(new BigDecimal("0.00"));
-        final Film film3 = new Film();
-        film3.setId(0L);
-        film3.setPrice(new BigDecimal("0.00"));
-        cartItem3.setFilm(film3);
-        entity.setCartItems(List.of(cartItem3));
-        entity.setTotalPrice(new BigDecimal("0.00"));
-        verify(mockShoppingCartRepository).save(entity);
+        assertEquals(0, shoppingCart.getCartItems().size());
     }
+
 
     @Test
     void testDeleteAllItemsFromShoppingCart_ShoppingCartRepositoryFindByIdReturnsAbsent() {

@@ -110,7 +110,7 @@ public class CartItemService {
         }
     }
 
-        @Transactional
+    @Transactional
     public ShoppingCartDto deleteAllItemsFromShoppingCart(Long cartId) {
         var shoppingCartOptional = shoppingCartRepository.findById(cartId);
 
@@ -122,7 +122,7 @@ public class CartItemService {
             shoppingCartRepository.save(shoppingCart);
             return shoppingCartDtoMapper.apply(shoppingCart);
         } else {
-            throw new EntityNotFoundException("Shopping cart with id " + cartId + " not found");
+            throw new EntityNotFoundException("Shopping cart with cart id " + cartId + " not found");
         }
     }
 }

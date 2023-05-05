@@ -2,6 +2,8 @@ package com.wasiewicz.onlineshop.security.service;
 
 import com.wasiewicz.onlineshop.security.model.*;
 import com.wasiewicz.onlineshop.security.repository.TokenRepository;
+import com.wasiewicz.onlineshop.security.repository.UserDTO;
+import com.wasiewicz.onlineshop.security.repository.UserDTOMapper;
 import com.wasiewicz.onlineshop.security.repository.UserRepository;
 import com.wasiewicz.onlineshop.security.validator.ObjectValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,10 +12,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class AuthenticationServiceTest {
@@ -22,7 +27,8 @@ class AuthenticationServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
+    @Mock
+    private UserDTOMapper userDTOMapper;
     @Mock
     private PasswordEncoder passwordEncoder;
 
@@ -93,19 +99,21 @@ class AuthenticationServiceTest {
                 .email(email)
                 .password(encodedPassword)
                 .build();
-        Token token = new Token(null, authToken, TokenType.BEARER, false, false, user);
-        // when
-        AuthenticationRequest request = new AuthenticationRequest(email, password);
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        Token token = new Token(null, authToken, TokenType.BEARER, false, false, user);
+
+        // when
+        when(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password))).thenReturn(new UsernamePasswordAuthenticationToken(email, password));
         when(passwordEncoder.matches(password, encodedPassword)).thenReturn(true);
         when(jwtService.generateToken(user)).thenReturn(authToken);
         when(tokenRepository.save(any(Token.class))).thenReturn(token);
-
+        AuthenticationResponse expectedResponse = AuthenticationResponse.builder().token(authToken).build();
+        AuthenticationResponse actualResponse = authenticationService.authenticate(new AuthenticationRequest(email, encodedPassword));
 
         // then
-        verify(userRepository).findByEmail(email);
-        verify(jwtService).generateToken(user);
-        verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
+        verify(userRepository, times(1)).findByEmail(email);
+        verify(jwtService, times(1)).generateToken(user);
         verify(tokenRepository, times(1)).findAllValidTokenByUser(user.getId());
+        assertEquals(expectedResponse, actualResponse);
     }
 }
