@@ -2,7 +2,6 @@ package com.wasiewicz.onlineshop.security.service;
 
 import com.wasiewicz.onlineshop.security.model.*;
 import com.wasiewicz.onlineshop.security.repository.TokenRepository;
-import com.wasiewicz.onlineshop.security.repository.UserDTOMapper;
 import com.wasiewicz.onlineshop.security.repository.UserRepository;
 import com.wasiewicz.onlineshop.security.validator.ObjectValidator;
 import org.junit.jupiter.api.BeforeEach;
