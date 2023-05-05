@@ -2,7 +2,6 @@ package com.wasiewicz.onlineshop.security.service;
 
 import com.wasiewicz.onlineshop.security.model.*;
 import com.wasiewicz.onlineshop.security.repository.TokenRepository;
-import com.wasiewicz.onlineshop.security.repository.UserDTO;
 import com.wasiewicz.onlineshop.security.repository.UserDTOMapper;
 import com.wasiewicz.onlineshop.security.repository.UserRepository;
 import com.wasiewicz.onlineshop.security.validator.ObjectValidator;
@@ -12,8 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -27,8 +24,6 @@ class AuthenticationServiceTest {
 
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private UserDTOMapper userDTOMapper;
     @Mock
     private PasswordEncoder passwordEncoder;
 

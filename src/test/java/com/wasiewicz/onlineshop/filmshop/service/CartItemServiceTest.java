@@ -2,7 +2,6 @@ package com.wasiewicz.onlineshop.filmshop.service;
 
 import com.wasiewicz.onlineshop.filmshop.dto.CartItemDto;
 import com.wasiewicz.onlineshop.filmshop.dto.FilmDTO;
-import com.wasiewicz.onlineshop.filmshop.dto.ShoppingCartDto;
 import com.wasiewicz.onlineshop.filmshop.mapper.CartItemDtoMapper;
 import com.wasiewicz.onlineshop.filmshop.mapper.ShoppingCartDtoMapper;
 import com.wasiewicz.onlineshop.filmshop.model.CartItem;
@@ -85,7 +84,6 @@ class CartItemServiceTest {
         film2.setDirector("director");
         film2.setStars("stars");
         film2.setPrice(new BigDecimal("0.00"));
-        final Optional<Film> film1 = Optional.of(film2);
 
         // Configure CartItemDtoMapper.apply(...).
         final CartItemDto cartItemDto1 = new CartItemDto(0L,
@@ -219,11 +217,9 @@ class CartItemServiceTest {
         List<CartItemDto> cartItemDtos = new ArrayList<>();
         cartItemDtos.add(cartItemDto);
 
-        ShoppingCartDto shoppingCartDto = new ShoppingCartDto(cartId, 0L, cartItemDtos, BigDecimal.TEN);
-
 
         // when
-        ShoppingCartDto result = mockCartItemService.deleteCartItemFromShoppingCart(cartId, cartItemId);
+
 
         // then
         verify(mockShoppingCartRepository, times(0)).findById(cartId);
