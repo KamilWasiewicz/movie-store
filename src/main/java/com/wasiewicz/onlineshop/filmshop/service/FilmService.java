@@ -8,20 +8,24 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class FilmService {
 
+
     private final FilmRepository filmRepository;
     private final FilmDtoMapper filmDtoMapper;
 
-    public List<FilmDTO> getFilms() {
-        List<Film> films = filmRepository.findAll();
+    public List<FilmDTO> getFilms(int limit) {
+        Page<Film> films = filmRepository.findAll(PageRequest.of(0,limit));
         return films
                 .stream()
                 .map(filmDtoMapper)
@@ -34,6 +38,23 @@ public class FilmService {
                 .orElseThrow(() -> new EntityNotFoundException("Product id is invalid " + id));
         return filmDtoMapper.apply(singleFilm);
     }
+    public List<String> getAllCategories() {
+        List<String> categories = filmRepository.findDistinctCategories();
+        return categories.stream()
+                .flatMap(category -> Stream.of(category.split("[,;]")))
+                .map(String::trim)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<FilmDTO> getFilmsByCategory(String category, int limit) {
+        List<Film> films = filmRepository.findByCategory("%" + category + "%", PageRequest.of(0, limit));
+        return films
+                .stream()
+                .map(filmDtoMapper)
+                .collect(Collectors.toList());
+    }
+
 
     @Transactional
     public FilmDTO addFilm(FilmDTO filmDTO) {
@@ -73,6 +94,7 @@ public class FilmService {
         filmEdited = filmRepository.save(filmEdited);
         return filmDtoMapper.apply(filmEdited);
     }
+
 
 }
 

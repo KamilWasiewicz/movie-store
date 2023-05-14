@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -59,22 +61,46 @@ class FilmServiceTest {
         film2.setImageUrl("imageUrl");
         when(mockFilmDtoMapper.apply(film2)).thenReturn(filmDTO);
         final List<Film> films = List.of(film2);
-        when(mockFilmRepository.findAll()).thenReturn(films);
+        when(mockFilmRepository.findAll(PageRequest.of(0,20))).thenReturn(new PageImpl<>(films));
 
         // Run the test
-        final List<FilmDTO> result = filmServiceUnderTest.getFilms();
+        final List<FilmDTO> result = filmServiceUnderTest.getFilms(20);
 
         // Verify the results
         assertThat(result).isEqualTo(List.of(expectedResult));
     }
 
     @Test
-    void testGetFilms_FilmRepositoryReturnsNoItems() {
+    void testGetAllCategories() {
         // Setup
-        when(mockFilmRepository.findAll()).thenReturn(Collections.emptyList());
+        when(mockFilmRepository.findDistinctCategories()).thenReturn(List.of("value"));
 
         // Run the test
-        final List<FilmDTO> result = filmServiceUnderTest.getFilms();
+        final List<String> result = filmServiceUnderTest.getAllCategories();
+
+        // Verify the results
+        assertThat(result).isEqualTo(List.of("value"));
+    }
+
+    @Test
+    void testGetAllCategories_FilmRepositoryReturnsNoItems() {
+        // Setup
+        when(mockFilmRepository.findDistinctCategories()).thenReturn(Collections.emptyList());
+
+        // Run the test
+        final List<String> result = filmServiceUnderTest.getAllCategories();
+
+        // Verify the results
+        assertThat(result).isEqualTo(Collections.emptyList());
+    }
+
+    @Test
+    void testGetFilms_FilmRepositoryReturnsNoItems() {
+        // Setup
+        when(mockFilmRepository.findAll(PageRequest.of(0,1))).thenReturn((new PageImpl<>(Collections.emptyList())));
+
+        // Run the test
+        final List<FilmDTO> result = filmServiceUnderTest.getFilms(1);
 
         // Verify the results
         assertThat(result).isEqualTo(Collections.emptyList());
