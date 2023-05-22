@@ -155,7 +155,7 @@ Please note that the above API endpoints represent the basic functionality of th
 Security and authentication in the REST API are implemented using JSON Web Tokens (JWT). A JWT token is generated during the login process and is required for authentication in certain endpoints.
 
 ## Demo <a name="demo"></a>
-![Demo Video](<https://gist.github.com/KamilWasiewicz/5fcea2ea38ae5a7127688dcdc7983aab>)
+https://gist.github.com/KamilWasiewicz/5fcea2ea38ae5a7127688dcdc7983aab
 ## Build Instructions <a name="build-instructions"></a>
 
 To build and run the application locally, follow these steps:
