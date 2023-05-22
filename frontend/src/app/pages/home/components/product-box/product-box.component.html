@@ -1,0 +1,39 @@
+<mat-card [ngClass]="{'text-center' : !fullWidthMode}">
+    <div [ngClass]="{'flex':fullWidthMode}">
+        <img class="mb-1 mt-5 mx-auto h-[200px]" 
+        [ngClass]="{'h-200px': !fullWidthMode, 'h-[360px] ml-5 mb-5':fullWidthMode}"
+        [src]="product?.imageUrl"
+        />
+        <div class="w-full "
+        [ngClass]="{'px-8 flex flex-col justify-between mt-5': fullWidthMode}">
+            <div>
+                <h5>
+                   {{product?.category}}
+                </h5>
+                <p  *ngIf="!fullWidthMode" class="truncate hower:whitespace-normal; font-bold" style=" font-size:larger"> {{product?.title}} </p>
+                <p  *ngIf="fullWidthMode" class="truncate hower:whitespace-normal;" style="padding-bottom: 4px;font-size:x-large; font-weight: bold;"> {{product?.title}} </p>
+                <p *ngIf="!fullWidthMode" style="font-size: smaller;" >{{product?.director}}</p>
+                <p *ngIf="fullWidthMode">
+                    <span style="font-weight: bold;">Director: </span>{{product?.director}}
+                  </p>
+                
+                <p *ngIf="fullWidthMode">
+                    <span style="font-weight: bold;">Stars: </span>{{product?.stars}}</p>
+                <p *ngIf="fullWidthMode">{{product?.description}}</p>
+            </div>
+            <div class="flex justify-between " >
+                    <span class="text-red-500 ml-2">{{product?.price | currency}}</span>
+                   
+                        <span style="font-size:small;" class="mb-5">{{product?.rating}} / 10 
+                         <mat-icon style="vertical-align: middle;" class="bg-yellow-400 rounded-full"
+                         >stars
+                         </mat-icon>
+                    </span>  
+                    <button  (click)="onAddToCart();" class="text-gray-500 mr-2 mb-5"> 
+                        <mat-icon >add_shopping_cart</mat-icon>
+                    </button>
+                    
+            </div>
+        </div>
+    </div>
+</mat-card>
