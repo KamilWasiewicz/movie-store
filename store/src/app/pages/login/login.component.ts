@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { take } from 'rxjs';
-import { RegisterUser, User } from 'src/app/models/user.model';
+import {  User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 
 
@@ -15,13 +15,6 @@ export class LoginComponent {
   loginForm: FormGroup;
   isLoginError =false;
 
-  registerUser: RegisterUser = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: ''
-  };
-
   user: User = {
     email: '',
     password: ''
@@ -33,9 +26,7 @@ export class LoginComponent {
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
-  register(registerUser:RegisterUser){
-    this.authService.register(registerUser).subscribe();
-  }
+ 
   logout() {
     const token = localStorage.getItem('authToken');
   
@@ -45,6 +36,7 @@ export class LoginComponent {
         .subscribe({
           next: () => {
             this.authService.isLogin = false;
+            localStorage.clear()
           },
           error: (error) => {
             console.error(error);
@@ -63,6 +55,7 @@ login() {
       next: (token: string) => {
         localStorage.setItem('authToken', token);
         this.router.navigate(['']);
+        
         this.authService.isLogin = true;
       },
       error: (error) => {

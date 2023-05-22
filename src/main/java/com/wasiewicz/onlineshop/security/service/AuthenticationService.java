@@ -24,8 +24,8 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         validator.validate(request);
         var appUser = AppUser.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
+                .firstname(request.getFirstName())
+                .lastname(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
