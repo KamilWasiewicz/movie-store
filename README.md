@@ -17,6 +17,14 @@ This project is an online store application built with Java Spring Boot for the 
 
 https://github.com/Wasiewicz/movie-store/assets/124580574/e3b8d6e1-78f7-45db-9ec7-f94650032d43
 
+
+https://github.com/Wasiewicz/movie-store/assets/124580574/eb036b36-5de4-4696-b56d-9c4949b223cd
+
+
+
+https://github.com/Wasiewicz/movie-store/assets/124580574/6ddbb5ad-49dd-4f86-b4f9-ff4506b9083c
+
+
 ## Features <a name="features"></a>
 
 - User Registration: Users can register in the application by providing their first name, last name, email, and password.
