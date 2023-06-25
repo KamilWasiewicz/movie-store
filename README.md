@@ -15,6 +15,8 @@ Table of Contents:
 
 This project is an online store application built with Java Spring Boot for the backend and Angular for the frontend. It provides a simple visualization of a functional REST API for managing an online store. The backend REST API is fully implemented and functional, while the frontend implementation is still under development.
 
+https://github.com/Wasiewicz/movie-store/assets/124580574/e3b8d6e1-78f7-45db-9ec7-f94650032d43
+
 ## Features <a name="features"></a>
 
 - User Registration: Users can register in the application by providing their first name, last name, email, and password.
@@ -51,6 +53,10 @@ The application utilizes a RESTful API for seamless communication between the fr
   - Description: Retrieves a list of films.
   - Parameters:
     - `limit` (optional): Limits the number of films returned (default: 20).
+
+
+
+
 
 - **Get Single Film**
   - Endpoint: `GET /api/films/{id}`
